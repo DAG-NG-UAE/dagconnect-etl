@@ -3,6 +3,7 @@ from google.cloud import storage
 import pandas as pd
 import io
 import os
+import json
 from google.oauth2 import service_account
 from src.utils.GCS.play_console_etl import read_file
 from src.utils.supabase_connector import get_play_store_last_sync_time
@@ -14,8 +15,10 @@ class GCSExtractor:
         gcp_key = os.getenv("GCP_SERVICE_ACCOUNT_JSON")
         if not gcp_key:
             raise ValueError("GCP_SERVICE_ACCOUNT_JSON is missing from environment variables!")
+        
+        key_data = json.loads(gcp_key)
         credentials = service_account.Credentials.from_service_account_file(
-            gcp_key,
+            key_data,
             scopes=[
                 "https://www.googleapis.com/auth/androidpublisher",
                 "https://www.googleapis.com/auth/devstorage.read_only",
