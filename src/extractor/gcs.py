@@ -11,8 +11,11 @@ from src.loader.database import SupabaseLoader
 class GCSExtractor:
     @staticmethod
     def begin_fetch(): 
+        gcp_key = os.getenv("GCP_SERVICE_ACCOUNT_JSON")
+        if not gcp_key:
+            raise ValueError("GCP_SERVICE_ACCOUNT_JSON is missing from environment variables!")
         credentials = service_account.Credentials.from_service_account_file(
-            os.getenv("GCP_SERVICE_ACCOUNT_KEY", "service-account.json"),
+            gcp_key,
             scopes=[
                 "https://www.googleapis.com/auth/androidpublisher",
                 "https://www.googleapis.com/auth/devstorage.read_only",

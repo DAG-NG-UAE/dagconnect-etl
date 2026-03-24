@@ -1,2 +1,9 @@
 dag-dashboard-bastion.pem
+service-account.json
+*.json
 .env
+
+# Python 
+__pycache__/
+venv/
+.pytest_cache/
