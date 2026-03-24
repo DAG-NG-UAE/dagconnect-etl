@@ -1,0 +1,21 @@
+# --- Core ETL & Data Handling ---
+pandas
+numpy
+
+# --- AWS Connectivity (RDS & Secrets Manager) ---
+boto3
+SQLAlchemy
+psycopg2-binary
+
+# --- Google Play Store (API & Excel Handling) ---
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+google-cloud
+openpyxl
+
+# --- Production Environment ---
+python-dotenv
+google_play_scraper
+paramiko==2.12.0
+sshtunnel==0.4.0
