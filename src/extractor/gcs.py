@@ -13,11 +13,18 @@ class GCSExtractor:
     @staticmethod
     def begin_fetch(): 
         gcp_key = os.getenv("GCP_SERVICE_ACCOUNT_JSON")
+        bucket = os.getenv("PLAY_BUCKET_NAME")
+        package_name = os.getenv("PLAY_PACKAGE_NAME")
+
         if not gcp_key:
             raise ValueError("GCP_SERVICE_ACCOUNT_JSON is missing from environment variables!")
+        if not bucket:
+            raise ValueError("PLAY_BUCKET_NAME is missing from environment variables!")
+        if not package_name:
+            raise ValueError("PLAY_PACKAGE_NAME is missing from environment variables!")
         
         key_data = json.loads(gcp_key)
-        credentials = service_account.Credentials.from_service_account_file(
+        credentials = service_account.Credentials.from_service_account_info(
             key_data,
             scopes=[
                 "https://www.googleapis.com/auth/androidpublisher",
@@ -25,11 +32,11 @@ class GCSExtractor:
             ],
         )
         client = storage.Client(credentials=credentials)
-        bucket = "pubsite_prod_8540944584425013860"
+        
 
         print("ALL files in bucket:\n")
         for blob in client.list_blobs(bucket):
-            table_name = extract_table_name(blob.name, "com.dagconnect")
+            table_name = extract_table_name(blob.name, package_name)
             print(f"  Reading  : {blob.name}")
             print(f"  → Table  : {table_name}")
 
