@@ -165,5 +165,52 @@ TABLES_SCHEMA = {
             "message": "Error details if the status is 'failed'.",
             "createddate": "Date and time when the ETL run was recorded."
         }
+    }, 
+    "user_login_activities": { 
+        "columns": [
+            ("userloginactivitieskey", "BIGINT PRIMARY KEY"), 
+            ("loginid", "VARCHAR(100) REFERENCES user_login_accounts(loginid)"), 
+            ("activity", "VARCHAR(100)"), 
+            ("latitude", "NUMERIC(10,6)"),
+            ("longitude", "NUMERIC(10,6)"),
+            ("address", "JSONB"),
+            ("createdby", "VARCHAR(100) REFERENCES user_login_accounts(loginid)"), 
+            ("createddate", "TIMESTAMP WITH TIME ZONE"), 
+            ("isactive", "BOOLEAN")
+        ],
+        "comments": {
+            "table": "Logs of user login activities on the platform.",
+            "loginid": "Unique identifier for the login account.",
+            "activity": "Type of activity (e.g., login, logout).",
+            "latitude": "Latitude of the user.",
+            "longitude": "Longitude of the user.",
+            "address": "This is the generated address from the latitude and longitude.",
+            "createdby": "User who performed the activity",
+            "createddate": "Date and time when the activity was recorded.",
+            "isactive": "Whether the activity is active."
+        }
+    }, 
+    "geocoded_locations": {
+        "columns": [
+            ("id", "BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY"),
+            ("lat_rounded", "NUMERIC(8,4)"),
+            ("lon_rounded", "NUMERIC(8,4)"),
+            ("country", "TEXT"),
+            ("state", "TEXT"),
+            ("city", "TEXT"),
+            ("full_address", "JSONB"),
+            ("createddate", "TIMESTAMP WITH TIME ZONE DEFAULT NOW()"),
+            ("UNIQUE", "(lat_rounded, lon_rounded)")
+        ],
+        "comments": {
+            "table": "Cache of reverse-geocoded coordinates to avoid redundant Nominatim API calls.",
+            "lat_rounded": "Latitude rounded to 4 decimal places (~11m precision).",
+            "lon_rounded": "Longitude rounded to 4 decimal places (~11m precision).",
+            "country": "Country resolved from coordinates.",
+            "state": "State or region resolved from coordinates.",
+            "city": "City, town or village resolved from coordinates.",
+            "full_address": "Full address object returned by Nominatim.",
+            "createddate": "When this coordinate was geocoded.",
+        }
     }
 }
