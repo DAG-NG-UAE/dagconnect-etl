@@ -44,12 +44,12 @@ class AWSExtractor:
             
             # These will now all share the singleton engine/tunnel 
             # created inside DBConnector the first time one is called.
-            # AWSExtractor.fetch_service_requests("service_request")
-            # AWSExtractor.fetch_seller_data("seller")
-            # AWSExtractor.fetch_user_login_accounts("user_login_accounts")
-            # AWSExtractor.fetch_verified_customers("customer_user_login_account_mapping")
-            # AWSExtractor.fetch_purchased_items("purchased_items")
-            # AWSExtractor.fetch_purchased_vehicle_items("purchased_vehicle_items")
+            AWSExtractor.fetch_service_requests("service_request")
+            AWSExtractor.fetch_seller_data("seller")
+            AWSExtractor.fetch_user_login_accounts("user_login_accounts")
+            AWSExtractor.fetch_verified_customers("customer_user_login_account_mapping")
+            AWSExtractor.fetch_purchased_items("purchased_items")
+            AWSExtractor.fetch_purchased_vehicle_items("purchased_vehicle_items")
             AWSExtractor.fetch_user_login_activities("user_login_activities")
             
             logger.info("--- ✅ All AWS tables synced successfully ---")
