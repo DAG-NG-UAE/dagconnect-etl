@@ -89,25 +89,27 @@ class SupabaseLoader:
             logger.info(f"No data for {table_name}.")
             return
  
-        # 1. Filter rows to only those after last_sync using the date column
-        df["date"] = pd.to_datetime(df["date"])
-        # We ensure the last_sync is naive to match the CSV's date column
-        last_sync_dt = pd.to_datetime(last_sync)
-        if last_sync_dt.tzinfo is not None:
-            last_sync_dt = last_sync_dt.tz_localize(None)
-        df_filtered = df[df["date"] > last_sync_dt].copy()
- 
-        if df_filtered.empty:
-            logger.info(f"No new rows for {table_name} since {last_sync}.")
-            return
- 
-        logger.info(f"  {len(df_filtered)} new row(s) to load into '{table_name}'")
- 
+        # 1. Filter rows to only those after last_sync using the date column (if it exists)
+        if "date" in df.columns:
+            df["date"] = pd.to_datetime(df["date"])
+            last_sync_dt = pd.to_datetime(last_sync)
+            if last_sync_dt.tzinfo is not None:
+                last_sync_dt = last_sync_dt.tz_localize(None)
+            df_filtered = df[df["date"] > last_sync_dt].copy()
+
+            if df_filtered.empty:
+                logger.info(f"No new rows for {table_name} since {last_sync}.")
+                return
+
+            df_filtered["date"] = df_filtered["date"].dt.strftime("%Y-%m-%d")
+        else:
+            logger.info(f"No 'date' column in {table_name}, loading all {len(df)} row(s).")
+            df_filtered = df.copy()
+
+        logger.info(f"  {len(df_filtered)} row(s) to load into '{table_name}'")
+
         # 2. Add createddate so get_play_last_sync_time can track it next run
         df_filtered["createddate"] = pd.Timestamp.utcnow().isoformat()
- 
-        # 3. Convert date column to string for JSON serialisation
-        df_filtered["date"] = df_filtered["date"].dt.strftime("%Y-%m-%d")
  
         # 4. Handle NaNs → None (becomes null in JSON)
         df_filtered = df_filtered.astype(object).where(pd.notnull(df_filtered), None)
