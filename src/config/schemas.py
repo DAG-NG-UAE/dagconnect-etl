@@ -198,7 +198,10 @@ TABLES_SCHEMA = {
             ("createdby", "VARCHAR(100)"),
             ("active", "BOOLEAN")
             ("createddate", "TIMESTAMP WITH TIME ZONE")
-        ]
+        ], 
+        "comments": { 
+            "table": "Holds those who have entered their NIN into the system"
+        }
     },
     "geocoded_locations": {
         "columns": [
