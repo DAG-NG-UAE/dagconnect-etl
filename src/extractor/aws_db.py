@@ -51,6 +51,7 @@ class AWSExtractor:
             AWSExtractor.fetch_purchased_items("purchased_items")
             AWSExtractor.fetch_purchased_vehicle_items("purchased_vehicle_items")
             AWSExtractor.fetch_user_login_activities("user_login_activities")
+            AWSExtractor.fetch_customers("customer")
             
             logger.info("--- ✅ All AWS tables synced successfully ---")
             
@@ -196,6 +197,18 @@ class AWSExtractor:
 
         # --- Step 6: Load enriched data into Supabase ---
         SupabaseLoader.load_data(table_name, df)
+
+    @staticmethod
+    def fetch_customers(table_name: str) -> pd.DataFrame: 
+        print("Fetching the people with NIN and BVN in the system ")
+
+        last_sync = get_last_sync_time(table_name)
+        print(f"the last sync time is  {last_sync}")
+        query = f"select customerid, customerkey, nin, createddate from {table_name} where createddate >= :last_sync"
+        result = AWSExtractor.fetch_source_data(query, params={"last_sync": last_sync})
+        # load the result into the supabase
+        SupabaseLoader.load_data(table_name, result)
+
 
     @staticmethod
     def fetch_purchased_vehicle_items(table_name: str) -> pd.DataFrame: 
