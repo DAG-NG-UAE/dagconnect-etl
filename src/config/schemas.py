@@ -190,6 +190,16 @@ TABLES_SCHEMA = {
             "isactive": "Whether the activity is active."
         }
     }, 
+    "customer": { 
+        "columns": [
+            ("customerkey", "BIGINT PRIMARY KEY"),
+            ("customerid", "VARCHAR(100)"), 
+            ("nin", "TEXT"),
+            ("createdby", "VARCHAR(100)"),
+            ("active", "BOOLEAN")
+            ("createddate", "TIMESTAMP WITH TIME ZONE")
+        ]
+    },
     "geocoded_locations": {
         "columns": [
             ("id", "BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY"),
