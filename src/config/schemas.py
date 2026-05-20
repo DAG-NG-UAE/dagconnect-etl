@@ -196,7 +196,7 @@ TABLES_SCHEMA = {
             ("customerid", "VARCHAR(100)"), 
             ("nin", "TEXT"),
             ("createdby", "VARCHAR(100)"),
-            ("active", "BOOLEAN"),
+            ("isactive", "BOOLEAN"),
             ("createddate", "TIMESTAMP WITH TIME ZONE")
         ], 
         "comments": { 

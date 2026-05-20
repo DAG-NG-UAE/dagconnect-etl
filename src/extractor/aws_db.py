@@ -204,7 +204,7 @@ class AWSExtractor:
 
         last_sync = get_last_sync_time(table_name)
         print(f"the last sync time is  {last_sync}")
-        query = f"select customerkey, customerid, nin, createdby, active, createddate from {table_name} where createddate >= :last_sync"
+        query = f"select customerkey, customerid, nin, createdby, isactive, createddate from {table_name} where createddate >= :last_sync"
         result = AWSExtractor.fetch_source_data(query, params={"last_sync": last_sync})
         # load the result into the supabase
         SupabaseLoader.load_data(table_name, result)
