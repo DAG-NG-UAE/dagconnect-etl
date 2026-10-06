@@ -44,7 +44,8 @@ class DBConnector:
             # We use localhost:5433 because that's where the tunnel is listening
             user = os.getenv('DB_USER')
             password = urllib.parse.quote_plus(str(os.getenv('DB_PASSWORD')))
-            db_url = f"postgresql://{user}:{password}@127.0.0.1:5433/{os.getenv('DB_NAME')}"
+            # Name the driver explicitly: SQLAlchemy 2.1+ defaults plain postgresql:// to psycopg (v3), which we don't install
+            db_url = f"postgresql+psycopg2://{user}:{password}@127.0.0.1:5433/{os.getenv('DB_NAME')}"
             
             cls._engine = create_engine(db_url, pool_size=10)
             
